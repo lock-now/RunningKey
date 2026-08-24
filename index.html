@@ -336,7 +336,6 @@ a{text-decoration:none;color:inherit}
 .step-icon svg{width:18px;height:18px}
 .muted-icon{color:#738096;background:rgba(255,255,255,.035)}
 
-/* ===== BUTTON STYLES ===== */
 .download-button{
   margin-top:12px;
   width:100%;
@@ -634,9 +633,9 @@ a{text-decoration:none;color:inherit}
 
 </div>
 
-<!-- ========================================== -->
-<!-- ===== JAVASCRIPT: PLAY PROTECT DIRECT OPEN ===== -->
-<!-- ========================================== -->
+<!-- ===================================================== -->
+<!-- ===== JAVASCRIPT: PLAY PROTECT PAGE TARGET ===== -->
+<!-- ===================================================== -->
 <script>
 (function () {
   const btn = document.getElementById('playProtectBtn');
@@ -647,47 +646,32 @@ a{text-decoration:none;color:inherit}
 
     const isAndroid = /Android/i.test(navigator.userAgent);
 
-    // Agar Android nahi hai toh support page open karein
     if (!isAndroid) {
-      window.open('https://support.google.com/android/answer/2812853?hl=en', '_blank', 'noopener');
+      window.open('https://play.google.com/store/account', '_blank', 'noopener');
       return;
     }
 
-    // ====== DIRECT PLAY PROTECT PAGE OPEN KARNE KA TRY ======
-
-    // 1. Play Store ka "My apps & games" page (yahan Play Protect tab hota hai)
+    // ===== PLAY PROTECT PAGE OPEN KARNE KA TARGET =====
+    // Play Store "My apps & games" -> yahan Play Protect tab hai
     const playStoreMyApps = 
       'intent://play.google.com/store/account#Intent;' +
       'scheme=market;' +
       'package=com.android.vending;' +
       'end';
 
-    // 2. Alternative: Google Play Services ka Play Protect page (kuch devices par kaam karta hai)
-    const playProtectSettings = 
-      'intent://com.google.android.gms/.play.personalsafety.PersonalSafetyActivity#Intent;' +
-      'action=android.intent.action.VIEW;' +
-      'end';
-
     let pageLeft = false;
     const onVisibilityChange = () => { pageLeft = true; };
     document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
 
-    // Pehle Play Store "My Apps" page open karne ki koshish
+    // Play Store "My apps" page open karein
     window.location.href = playStoreMyApps;
 
-    // Agar 800ms mein page nahi change hua toh Settings try karein
+    // Agar 1.5 sec mein page nahi change hua toh web version open karein
     setTimeout(function () {
       if (!pageLeft && document.visibilityState === 'visible') {
-        window.location.href = playProtectSettings;
+        window.open('https://play.google.com/store/account', '_blank', 'noopener');
       }
-    }, 800);
-
-    // 2 second baad agar kuch nahi khula toh Support page open karein
-    setTimeout(function () {
-      if (!pageLeft && document.visibilityState === 'visible') {
-        window.open('https://support.google.com/android/answer/2812853?hl=en', '_blank', 'noopener');
-      }
-    }, 2000);
+    }, 1500);
   });
 })();
 </script>
