@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LockNow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*,
+*::before,
+*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#080b12;
+  --panel:#10151f;
+  --panel-2:#131a26;
+  --line:rgba(255,255,255,.08);
+  --line-bright:rgba(255,255,255,.13);
+  --text:#f7f9fc;
+  --muted:#8994a7;
+  --muted-2:#657083;
+  --blue:#3978ff;
+  --blue-2:#5b91ff;
+  --blue-soft:rgba(57,120,255,.12);
+  --green:#35d39a;
+}
+
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(700px 450px at 78% 5%,rgba(57,120,255,.12),transparent 65%),
+    radial-gradient(500px 350px at 8% 42%,rgba(57,120,255,.055),transparent 70%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+.site{min-height:100vh;position:relative;overflow:hidden}
+
+.header{
+  height:76px;
+  border-bottom:1px solid var(--line);
+  background:rgba(8,11,18,.72);
+  backdrop-filter:blur(22px);
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.header-inner{
+  width:min(1120px,calc(100% - 40px));
+  height:100%;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-icon{
+  width:38px;height:38px;border-radius:11px;
+  display:grid;place-items:center;
+  color:#fff;
+  background:linear-gradient(145deg,#3978ff,#2858d2);
+  box-shadow:0 9px 26px rgba(57,120,255,.25);
+}
+.brand-icon svg{width:19px;height:19px}
+.brand-text{
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:-.045em;
+}
+.brand-text span{color:var(--blue-2)}
+
+.secure-status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:999px;
+  color:#a8b1c0;
+  font-size:11px;
+  font-weight:600;
+}
+.status-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 0 4px rgba(53,211,154,.08);
+}
+
+.hero{
+  width:min(1120px,calc(100% - 40px));
+  margin:auto;
+  min-height:510px;
+  padding:72px 0 55px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  align-items:center;
+  gap:80px;
+}
+.hero-copy{position:relative;z-index:2}
+.eyebrow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#719dff;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.eyebrow-line{width:28px;height:1px;background:#4c84ff}
+.hero h1{
+  font-size:clamp(42px,5.2vw,67px);
+  line-height:1.03;
+  letter-spacing:-.065em;
+  font-weight:800;
+}
+.hero h1 span{
+  color:transparent;
+  background:linear-gradient(110deg,#fff 5%,#6d9dff 80%);
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+.hero-description{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.75;
+  max-width:570px;
+  margin-top:23px;
+}
+.hero-points{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-top:28px;
+  color:#aab3c1;
+  font-size:12px;
+}
+.hero-points>div{display:flex;align-items:center;gap:7px}
+.point-check{
+  width:18px;height:18px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(53,211,154,.1);
+  color:var(--green);
+  font-size:10px;
+}
+
+.hero-visual{
+  height:390px;
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+.glow{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(50px);
+  pointer-events:none;
+}
+.glow-one{width:250px;height:250px;background:rgba(57,120,255,.18)}
+.glow-two{width:150px;height:150px;background:rgba(91,145,255,.11);bottom:20px;right:40px}
+
+.device-card{
+  width:235px;
+  height:360px;
+  padding:8px;
+  border-radius:31px;
+  background:linear-gradient(145deg,#273140,#070a10 55%,#1a2230);
+  box-shadow:
+    0 40px 70px rgba(0,0,0,.42),
+    inset 0 1px 1px rgba(255,255,255,.16);
+  transform:rotate(5deg);
+  position:relative;
+  z-index:2;
+}
+.device-top{
+  height:17px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+}
+.camera{width:5px;height:5px;background:#080a0e;border-radius:50%}
+.speaker{width:38px;height:4px;border-radius:10px;background:#080a0e}
+.device-screen{
+  height:calc(100% - 17px);
+  border-radius:24px;
+  background:
+    radial-gradient(160px 130px at 50% 35%,rgba(57,120,255,.19),transparent 70%),
+    linear-gradient(160deg,#151e2d,#0d131e);
+  border:1px solid rgba(255,255,255,.07);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px 18px;
+}
+.screen-header{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#cbd3df;
+  font-size:10px;
+  font-weight:700;
+}
+.shield-mini{
+  width:19px;height:19px;border-radius:50%;
+  display:grid;place-items:center;
+  color:var(--green);
+  background:rgba(53,211,154,.09);
+  border:1px solid rgba(53,211,154,.15);
+  font-size:9px;
+}
+.lock-orb{
+  width:104px;height:104px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  color:#6d9dff;
+  margin-top:48px;
+  position:relative;
+  background:radial-gradient(circle,rgba(57,120,255,.17),rgba(57,120,255,.035) 65%,transparent 66%);
+}
+.lock-orb svg{width:43px;height:43px;position:relative;z-index:2}
+.orb-ring{
+  position:absolute;inset:12px;
+  border:1px solid rgba(91,145,255,.35);
+  border-radius:50%;
+  box-shadow:0 0 35px rgba(57,120,255,.12);
+}
+.screen-title{margin-top:25px;font-size:15px;font-weight:700}
+.screen-subtitle{margin-top:6px;color:#657083;font-size:9px}
+.screen-progress{display:flex;gap:5px;margin-top:28px}
+.screen-progress span{width:25px;height:3px;border-radius:3px;background:#2b374a}
+.screen-progress span:first-child{background:#4c84ff}
+
+.setup{
+  width:min(800px,calc(100% - 40px));
+  margin:0 auto;
+  padding:10px 0 75px;
+}
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-bottom:18px;
+}
+.section-kicker{
+  display:block;
+  color:#667389;
+  font-size:9px;
+  letter-spacing:.16em;
+  font-weight:800;
+  margin-bottom:7px;
+}
+.section-heading h2{
+  font-size:24px;
+  letter-spacing:-.04em;
+}
+.step-count{
+  padding:6px 9px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  color:#788498;
+  font-size:10px;
+}
+
+.steps{display:grid;gap:14px}
+.step-card{
+  display:grid;
+  grid-template-columns:50px 1fr;
+  gap:19px;
+  padding:25px;
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(20,27,39,.96),rgba(14,19,28,.96));
+  border:1px solid var(--line);
+  box-shadow:0 15px 45px rgba(0,0,0,.16);
+  transition:.25s ease;
+}
+.step-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--line-bright);
+}
+.step-card.active{
+  border-color:rgba(57,120,255,.25);
+}
+.step-number{
+  width:50px;height:50px;
+  border-radius:14px;
+  display:grid;place-items:center;
+  color:#78a2ff;
+  background:rgba(57,120,255,.09);
+  border:1px solid rgba(57,120,255,.12);
+  font-size:11px;
+  font-weight:800;
+}
+.step-title-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+}
+.step-label{
+  color:#59677d;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.15em;
+}
+.step-content h3{
+  margin-top:5px;
+  font-size:18px;
+  letter-spacing:-.025em;
+}
+.step-content>p{
+  margin-top:9px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+  max-width:610px;
+}
+.step-icon{
+  width:38px;height:38px;border-radius:11px;
+  display:grid;place-items:center;
+  color:#6d9dff;
+  background:rgba(57,120,255,.08);
+  flex-shrink:0;
+}
+.step-icon svg{width:18px;height:18px}
+.muted-icon{color:#738096;background:rgba(255,255,255,.035)}
+
+.download-button{
+  margin-top:18px;
+  width:100%;
+  min-height:52px;
+  padding:0 10px 0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:12px;
+  background:linear-gradient(110deg,#3978ff,#2d63dc);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  box-shadow:0 13px 30px rgba(57,120,255,.18);
+  transition:.22s ease;
+}
+.download-button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 34px rgba(57,120,255,.26);
+}
+.button-arrow{
+  width:34px;height:34px;
+  border-radius:9px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.13);
+}
+.button-arrow svg{width:16px;height:16px}
+
+.file-details{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  margin-top:10px;
+  color:#5f6c80;
+  font-size:10px;
+}
+.file-details i{width:3px;height:3px;border-radius:50%;background:#4d596b}
+
+.instructions{margin-top:14px}
+.instruction{
+  min-height:43px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  color:#929db0;
+  font-size:12px;
+}
+.instruction:last-child{border-bottom:0}
+.instruction strong{color:#c9d0db;font-weight:600}
+.instruction-number{
+  width:23px;height:23px;border-radius:7px;
+  display:grid;place-items:center;
+  color:#7f8ba0;background:rgba(255,255,255,.04);
+  font-size:9px;font-weight:800;
+  flex-shrink:0;
+}
+.info-box{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-top:14px;
+  padding:12px 13px;
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.045);
+  color:#667286;
+  font-size:10.5px;
+  line-height:1.55;
+}
+.info-symbol{
+  width:17px;height:17px;
+  border:1px solid #526075;
+  border-radius:50%;
+  display:grid;place-items:center;
+  flex-shrink:0;
+  font-size:9px;
+}
+
+.footer{
+  width:min(800px,calc(100% - 40px));
+  margin:auto;
+  padding:22px 0 30px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  color:#59667a;
+  font-size:10px;
+}
+.footer-separator{width:3px;height:3px;border-radius:50%;background:#394355}
+
+@media(max-width:850px){
+  .hero{grid-template-columns:1fr;gap:20px;padding-top:55px}
+  .hero-visual{height:320px}
+  .device-card{transform:rotate(4deg) scale(.88)}
+}
+@media(max-width:560px){
+  .header{height:68px}
+  .header-inner{width:calc(100% - 30px)}
+  .secure-status{display:none}
+  .hero,.setup,.footer{width:calc(100% - 30px)}
+  .hero{padding:43px 0 40px;min-height:auto}
+  .hero h1{font-size:42px}
+  .hero-description{font-size:14px}
+  .hero-points{display:grid;gap:10px}
+  .hero-visual{height:290px}
+  .device-card{width:205px;height:310px}
+  .lock-orb{margin-top:35px}
+  .setup{padding-bottom:50px}
+  .section-heading h2{font-size:21px}
+  .step-card{grid-template-columns:1fr;padding:19px;gap:14px}
+  .step-number{width:42px;height:42px;border-radius:12px}
+  .step-title-row{gap:10px}
+  .step-icon{width:34px;height:34px}
+  .file-details{font-size:9px}
+}
+</style>
+
+</head>
+
+<body>
+<div class="site">
+
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="#">
+        <span class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="5" y="3" width="14" height="18" rx="3"/>
+            <path d="M9 7h6M10 17h4"/>
+          </svg>
+        </span>
+        <span class="brand-text">Lock<span>Now</span></span>
+      </a>
+
+      <div class="secure-status">
+        <span class="status-dot"></span>
+        Secure setup
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="eyebrow-line"></span>
+          Device setup
+        </div>
+
+        <h1>Install <span>Running Key.</span></h1>
+
+        <p class="hero-description">
+          Install the official LockNow application with a fast, single-step setup designed for your device.
+        </p>
+
+        <div class="hero-points">
+          <div><span class="point-check">✓</span> Official application</div>
+          <div><span class="point-check">✓</span> Single-step APK</div>
+          <div><span class="point-check">✓</span> Quick installation</div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="glow glow-one"></div>
+        <div class="glow glow-two"></div>
+
+        <div class="device-card">
+          <div class="device-top">
+            <span class="camera"></span>
+            <span class="speaker"></span>
+          </div>
+
+          <div class="device-screen">
+            <div class="screen-header">
+              <span>LockNow</span>
+              <span class="shield-mini">✓</span>
+            </div>
+
+            <div class="lock-orb">
+              <div class="orb-ring"></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                <rect x="5" y="10" width="14" height="11" rx="2.2"/>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+              </svg>
+            </div>
+
+            <div class="screen-title">Device protected</div>
+            <div class="screen-subtitle">Complete setup to continue</div>
+
+            <div class="screen-progress">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="setup">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">NEW KEY</span>
+          <h2>Install your running key</h2>
+        </div>
+        <span class="step-count">1 step</span>
+      </div>
+
+      <div class="steps">
+        <article class="step-card active">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <div class="step-title-row">
+              <div>
+                <span class="step-label">SINGLE STEP</span>
+                <h3>Download & install the running key</h3>
+              </div>
+              <span class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>
+                </svg>
+              </span>
+            </div>
+            <p>Before installing the APK, please turn off Google Play Protect. Then download the APK and install it on your Android device.</p>
+
+            <a href="PLAY_PROTECT_SETTINGS_URL" class="download-button secondary-button" target="_blank" rel="noopener">
+              <span>Turn Off Play Protect</span>
+              <span class="button-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg></span>
+            </a>
+
+            <a href="YOUR_NEW_KEY_APK_URL" class="download-button" download>
+              <span>Download Running Key APK</span>
+              <span class="button-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5-5-5"/><path d="M5 21h14"/></svg></span>
+            </a>
+
+            <div class="file-details"><span>Running-Key.apk</span><i></i><span>Android</span><i></i><span>Single-step installer</span></div>
+
+            <div class="instructions">
+              <div class="instruction"><span class="instruction-number">01</span><span><strong>Turn off Play Protect</strong> before installing.</span></div>
+              <div class="instruction"><span class="instruction-number">02</span><span><strong>Download the app</strong> using the button above.</span></div>
+              <div class="instruction"><span class="instruction-number">03</span><span><strong>Install the APK</strong> and you're done.</span></div>
+            </div>
+
+            <div class="info-box"><span class="info-symbol">i</span><span>Please make sure Play Protect is turned off before starting the APK installation.</span></div>
+          </div>
+        </article>
+      </div>
+
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 LockNow</span>
+    <span class="footer-separator"></span>
+    <span>Secure LockNow</span>
+  </footer>
+
+</div>
+</body>
+
+</html>
